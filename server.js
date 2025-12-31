@@ -1,5 +1,4 @@
 import express from "express";
-import fetch from "node-fetch";
 
 const app = express();
 
@@ -7,12 +6,12 @@ app.get("/buscar", async (req, res) => {
   const q = req.query.q;
   if (!q) return res.json([]);
 
-  const url =
-    "https://api.mercadolibre.com/sites/MLB/search?q=" +
-    encodeURIComponent(q) +
-    "&limit=20";
-
   try {
+    const url =
+      "https://api.mercadolibre.com/sites/MLB/search?q=" +
+      encodeURIComponent(q) +
+      "&limit=20";
+
     const r = await fetch(url);
     const d = await r.json();
 
@@ -27,10 +26,13 @@ app.get("/buscar", async (req, res) => {
     res.json(produtos);
 
   } catch (e) {
+    console.log(e);
     res.status(500).json({ erro: true });
   }
 });
 
-app.listen(3000, () => {
-  console.log("API rodando");
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("API rodando na porta", PORT);
 });
